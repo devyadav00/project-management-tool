@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project Management Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .project-form {
+            margin-bottom: 20px;
+        }
+        .project-form input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .project-form input[type="submit"] {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        .project-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .project-list li {
+            margin-bottom: 10px;
+        }
+        .project-list li .delete-btn {
+            background-color: #f44336;
+            border: none;
+            color: white;
+            padding: 3px 5px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .task-list {
+            margin-top: 10px;
+            list-style-type: none;
+            padding: 0;
+        }
+        .task-list li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Project Management Tool</h1>
+
+    <div class="project-form">
+        <input type="text" id="project-name" placeholder="Enter project name">
+        <input type="submit" value="Create Project" onclick="createProject()">
+    </div>
+
+    <ul class="project-list" id="project-list">
+    </ul>
+
+    <script>
+        let projects = [];
+
+        function createProject() {
+            const projectNameInput = document.getElementById('project-name');
+            const projectName = projectNameInput.value.trim();
+
+            if (projectName !== '') {
+                const project = {
+                    name: projectName,
+                    tasks: []
+                };
+
+                projects.push(project);
+
+                renderProjects();
+
+                projectNameInput.value = '';
+            }
+        }
+
+        function deleteProject(index) {
+            projects.splice(index, 1);
+
+            renderProjects();
+        }
+
+        function renderProjects() {
+            const projectList = document.getElementById('project-list');
+            projectList.innerHTML = '';
+
+            projects.forEach((project, index) => {
+                const li = document.createElement('li');
+                li.textContent = project.name;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.onclick = () => deleteProject(index);
+
+                li.appendChild(deleteBtn);
+                projectList.appendChild(li);
+
+                const taskList = document.createElement('ul');
+                taskList.classList.add('task-list');
+
+                project.tasks.forEach(task => {
+                    const taskLi = document.createElement('li');
+                    taskLi.textContent = task;
+                    taskList.appendChild(taskLi);
+                });
+
+                li.appendChild(taskList);
+            });
+        }
+    </script>
+</body>
+</html>
